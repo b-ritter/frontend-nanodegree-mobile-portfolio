@@ -19,6 +19,7 @@ cameron *at* udacity *dot* com
 // As you may have realized, this website randomly generates pizzas.
 // Here are arrays of all possible pizza ingredients.
 var pizzaIngredients = {};
+var backgroundPizzaScale = 0.431;
 pizzaIngredients.meats = [
   "Pepperoni",
   "Sausage",
@@ -505,7 +506,9 @@ function updatePositions() {
   var items = document.querySelectorAll('.mover');
   for (var i = 0; i < items.length; i++) {
     var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    var val = items[i].basicLeft + 100 * phase;
+    items[i].style.transform = 'translateX(' + val + 'px)' + 'translateY(' + items[i].basicY + 'px)' + ' scale(' + backgroundPizzaScale + ')';
+    // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -525,14 +528,18 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < cols * 3; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
-    elem.style.height = "100px";
-    elem.style.width = "73.333px";
+    // elem.style.height = "100px";
+    // elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
-    elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    elem.basicY = (Math.floor(i / cols) * s);
+    var val = 'translateY(' + elem.basicY + 'px)' ;
+    elem.style.transform = val + 'scaleX(0.431)';
+    // elem.style.top = elem.basicY + 'px';
+    console.log(val);
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
   updatePositions();
