@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.basicLeft = (i % cols) * s;
     elem.basicY = (Math.floor(i / cols) * s);
     var val = 'translateY(' + elem.basicY + 'px)' ;
-    elem.style.transform = val + 'scaleX(0.431)';
+    // elem.style.transform = val;
     // elem.style.top = elem.basicY + 'px';
     console.log(val);
     document.querySelector("#movingPizzas1").appendChild(elem);
