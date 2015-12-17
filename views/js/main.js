@@ -464,6 +464,7 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
+    // Just calculate the new width the pizzas should be once
     var dx = determineDx(pizzaIcons[0], size);
     var newwidth = (pizzaIcons[0].offsetWidth + dx) + 'px';
     for (var i = 0; i < pizzaIcons.length; i++) {
@@ -491,6 +492,7 @@ for (var i = 2; i < 100; i++) {
 // Get all the pizzas generated
 var pizzaList = pizzasDiv.querySelectorAll(".randomPizzaContainer");
 
+// Save a list of all the pizza image containers
 for (var i = 0; i < pizzaList.length; i++) {
     pizzaIcons.push(pizzaList[i]);
 }
@@ -526,7 +528,7 @@ function updatePositions() {
   var items = backgroundPizzas;
   var scrollTop = document.body.scrollTop;
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin( (scrollTop / 1250) + (i % 5) );
+    var phase = Math.sin( (scrollTop / 1250) + (i % 3) );
     var val = items[i].basicLeft + 100 * phase;
     // Use transform instead of 'left' to save recalculating styles
     items[i].style.transform = 'translateX(' + val + 'px)' + 'translateY(' + items[i].basicY + 'px)' + ' scale(' + backgroundPizzaScale + ')';
@@ -546,7 +548,7 @@ window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
-  var cols = 8;
+  var cols = 5;
   var rows = 3;
   var s = 256;
   var initialVerticalOffsetFactor = 1.5;
