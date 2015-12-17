@@ -12,4 +12,6 @@ image used on the index.html page.
 I then set what was clearly analytics code not necessary for the page to run to
 async. That way, these scripts will not be render blocking.
 
-Because there really wasn't much css, I just inlined it all. 
+Because there really wasn't much css, I just inlined it all. I also eliminated
+the 'Open Sans' web font because I couldn't get the page score into an adaquate
+range, even when using the [web font loader](https://github.com/typekit/webfontloader). 

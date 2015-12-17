@@ -55,12 +55,10 @@ gulp.task('watch', function(){
 });
 
 gulp.task('min', function(){
-	return gulp.src('js/**/*.js')
+	return gulp.src('*/js/**/*.js', {base: ''})
 		.pipe(uglify())
 		.pipe(rename({suffix: '.min'}))
 		.pipe(gulp.dest(''));
 });
-
-
 
 gulp.task('default', [ 'watch' ]);
