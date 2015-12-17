@@ -26,56 +26,9 @@ gulp.task('browser-sync', function() {
         open: false,
         server: {
           baseDir: ''
-        }
+        },
+        tunnel: 'pizza'
     });
-});
-
-// Set up testing
-gulp.task('browser-sync-psi', function() {
-    browserSync.init({
-        port: portVal,
-        open: false,
-        server: {
-          baseDir: ''
-        }
-    });
-});
-
-gulp.task('ngrok-url', function(cb) {
-  return ngrok.connect(portVal, function (err, url) {
-    site = url;
-    cb();
-  });
-});
-
-gulp.task('psi-desktop', function (cb) {
-  psi(site, {
-    nokey: 'true',
-    strategy: 'desktop'
-  }, cb);
-});
-
-gulp.task('psi-mobile', function (cb) {
-  psi(site, {
-    nokey: 'true',
-    strategy: 'mobile'
-  }, cb);
-});
-
-// psi sequence with 'browser-sync-psi' instead
-gulp.task('psi-seq', function (cb) {
-  return sequence(
-    'browser-sync-psi',
-    'ngrok-url',
-    'psi-desktop',
-    'psi-mobile',
-    cb
-  );
-});
-
-// psi task runs and exits
-gulp.task('psi', ['psi-seq'], function() {
-  process.exit();
 });
 
 app_js.forEach(function(currentValue, index, app_js){

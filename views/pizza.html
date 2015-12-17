@@ -2,6 +2,9 @@
 <html>
 <head>
 
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/bootstrap-grid.css">
+
 </head>
 
 <body>
@@ -136,20 +139,6 @@
     </div>
     <div id="footer" class="col-md-12">Thanks for visiting! &copy; 2014 Udacity</div>
   </div>
-  <script>
-      var cb = function() {
-        var l = document.createElement('link'); l.rel = 'stylesheet';
-        l.href = 'css/style.css';
-        var b = document.createElement('link'); l.rel = 'stylesheet';
-        b.href = 'css/bootstrap-grid.css';
-        var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
-        h.parentNode.insertBefore(b, h);
-      };
-      var raf = requestAnimationFrame || mozRequestAnimationFrame ||
-          webkitRequestAnimationFrame || msRequestAnimationFrame;
-      if (raf) raf(cb);
-      else window.addEventListener('load', cb);
-    </script>
   <script type="text/javascript" src="js/main.js" ></script>
 
 </body>

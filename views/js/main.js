@@ -19,7 +19,19 @@ cameron *at* udacity *dot* com
 // As you may have realized, this website randomly generates pizzas.
 // Here are arrays of all possible pizza ingredients.
 var pizzaIngredients = {};
+
+// The pizza icons to be resized
+var pizzaIcons = [];
+
+// The background pizzas
+var backgroundPizzas = [];
+
+// How much to scale down the background pizzas
 var backgroundPizzaScale = 0.431;
+
+// Get the container div of the random pizzas
+var pizzasDiv = document.getElementById("randomPizzas");
+
 pizzaIngredients.meats = [
   "Pepperoni",
   "Sausage",
@@ -401,6 +413,7 @@ var pizzaElementGenerator = function(i) {
 
 // resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
 var resizePizzas = function(size) {
+
   window.performance.mark("mark_start_resize");   // User Timing API function
 
   // Changes the value for the size of the pizza above the slider
@@ -425,7 +438,7 @@ var resizePizzas = function(size) {
    // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
-    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+    var windowWidth = pizzasDiv.offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
     // TODO: change to 3 sizes? no more xl?
@@ -451,10 +464,10 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    var dx = determineDx(pizzaIcons[0], size);
+    var newwidth = (pizzaIcons[0].offsetWidth + dx) + 'px';
+    for (var i = 0; i < pizzaIcons.length; i++) {
+      pizzaIcons[i].style.width = newwidth;
     }
   }
 
@@ -471,8 +484,15 @@ window.performance.mark("mark_start_generating"); // collect timing data
 
 // This for-loop actually creates and appends all of the pizzas when the page loads
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
-  pizzasDiv.appendChild(pizzaElementGenerator(i));
+  var myPizza = pizzaElementGenerator(i);
+  pizzasDiv.appendChild(myPizza);
+}
+
+// Get all the pizzas generated
+var pizzaList = pizzasDiv.querySelectorAll(".randomPizzaContainer");
+
+for (var i = 0; i < pizzaList.length; i++) {
+    pizzaIcons.push(pizzaList[i]);
 }
 
 // User Timing API again. These measurements tell you how long it took to generate the initial pizzas
@@ -503,14 +523,14 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  var items = backgroundPizzas;
+  var scrollTop = document.body.scrollTop;
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    var phase = Math.sin( (scrollTop / 1250) + (i % 5) );
     var val = items[i].basicLeft + 100 * phase;
+    // Use transform instead of 'left' to save recalculating styles
     items[i].style.transform = 'translateX(' + val + 'px)' + 'translateY(' + items[i].basicY + 'px)' + ' scale(' + backgroundPizzaScale + ')';
-    // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
-
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
   window.performance.mark("mark_end_frame");
@@ -527,20 +547,21 @@ window.addEventListener('scroll', updatePositions);
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
+  var rows = 3;
   var s = 256;
-  for (var i = 0; i < cols * 3; i++) {
+  var initialVerticalOffsetFactor = 1.5;
+  // Make fewer pizzas!
+  for (var i = 0; i < cols * rows; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
-    // elem.style.height = "100px";
-    // elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
-    elem.basicY = (Math.floor(i / cols) * s);
+    elem.basicY = (Math.floor(i / cols) * s) - (s / initialVerticalOffsetFactor);
+    // Again, use transform instead of 'top' to position the pizzas to
+    // save recalculating styles
     var val = 'translateY(' + elem.basicY + 'px)' ;
-    // elem.style.transform = val;
-    // elem.style.top = elem.basicY + 'px';
-    console.log(val);
     document.querySelector("#movingPizzas1").appendChild(elem);
+    backgroundPizzas.push(elem);
   }
   updatePositions();
 });
