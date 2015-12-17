@@ -6,11 +6,11 @@ To view the site, run `gulp browser-sync`. You will be able to test the site at
 ## Critical Rendering Path Overview
 
 I did the easy optimizations first. I resized and optimized pizzeria.jpg and
-just optimized profilepic.jpg. I made separate, resized file for the pizzeria
+just optimized profilepic.jpg. I made a separate, resized file for the pizzeria
 image used on the index.html page.
 
 I then set what was clearly analytics code not necessary for the page to run to
-async. That way, these scripts will not be render blocking.
+asynchronously. That way, these scripts will not be render blocking.
 
 Because there really wasn't much css, I just inlined it all. I also eliminated
 the 'Open Sans' web font because I couldn't get the page score into an adequate
@@ -19,7 +19,7 @@ range, even when using the [web font loader](https://github.com/typekit/webfontl
 Note: I tried [Ilya Grigorik's script](https://developers.google.com/speed/docs/insights/OptimizeCSSDelivery)
 on the pizza.html page, but it did seem to work properly. Since the project
 callded for page speed testing only on index.html, I left the styles linked as
-in the default file. 
+in the default file.
 
 # Pizza Optimization Overview
 
