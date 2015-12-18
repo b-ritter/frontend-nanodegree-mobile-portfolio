@@ -46,7 +46,7 @@ appears that my fps is not quite hitting 60.
 
 ## Notes on Resubmission
 
-# Overview
+### Overview
 
 Most of the critical changes I had to make were in the code to animate the little
 pizzas in the background. During my initial optimization, I made several changes
@@ -78,7 +78,7 @@ images. `getElementsByClassName()` is now used instead to boost performance.
   * Declare the `elem` variable outside the loop
   * Add 'px' to the left position style to preserve position in `translateX` calculation
 
-# Other Changes
+### Other Changes
 
 * I modified the gulpfile a bit to autoprefix the css in the pizza file.
 * I removed the '/' before the optimized thumbnail pizza image so that it now
