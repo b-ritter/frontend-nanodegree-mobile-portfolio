@@ -373,6 +373,7 @@ var makeRandomPizza = function() {
 
 // returns a DOM element for each pizza
 var pizzaElementGenerator = function(i) {
+  'use strict';
   var pizzaContainer,             // contains pizza title, image and list of ingredients
       pizzaImageContainer,        // contains the pizza image
       pizzaImage,                 // the pizza image itself
@@ -419,14 +420,15 @@ var resizePizzas = function(size) {
   // Changes the value for the size of the pizza above the slider
   function changeSliderLabel(size) {
     switch(size) {
+      // querySelectorAll() replaced by getElementById()
       case "1":
-        document.querySelector("#pizzaSize").innerHTML = "Small";
+        document.getElementById("pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.querySelector("#pizzaSize").innerHTML = "Medium";
+        document.getElementById("pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.querySelector("#pizzaSize").innerHTML = "Large";
+        document.getElementById("pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -490,7 +492,8 @@ for (var i = 2; i < 100; i++) {
 }
 
 // Get all the pizzas generated
-var pizzaList = pizzasDiv.querySelectorAll(".randomPizzaContainer");
+// Using getElementsByClassName now to boost performance
+var pizzaList = pizzasDiv.getElementsByClassName("randomPizzaContainer");
 
 // Save a list of all the pizza image containers
 for (var i = 0; i < pizzaList.length; i++) {
@@ -527,11 +530,24 @@ function updatePositions() {
 
   var items = backgroundPizzas;
   var scrollTop = document.body.scrollTop;
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin( (scrollTop / 1250) + (i % 3) );
-    var val = items[i].basicLeft + 100 * phase;
+  // Store the length of the array in a variable to improve for-loop performance
+  var phases = [];
+  var numberOfPhases = 5;
+  var phaseCounter = 0;
+  // Precalculate phases to improve performance
+  for (var p = 0; p < numberOfPhases; p++){
+    phases.push( 100 * Math.sin( (scrollTop / 1250) + p) );
+  }
+
+  for (var i = 0, itemsLength = items.length; i < itemsLength; i++) {
+    // Reset the phaseCounter if it goes out of bounds
+    if( phaseCounter > numberOfPhases ){
+      phaseCounter = 0;
+    }
     // Use transform instead of 'left' to save recalculating styles
-    items[i].style.transform = 'translateX(' + val + 'px)' + 'translateY(' + items[i].basicY + 'px)' + ' scale(' + backgroundPizzaScale + ')';
+    // The phase values are found in a simple lookup 'table'
+    items[i].style.transform = 'translateX(' + phases[phaseCounter] + 'px)';
+    phaseCounter++;
   }
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
@@ -548,21 +564,22 @@ window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
-  var cols = 5;
+  var cols = 8;
   var rows = 3;
   var s = 256;
-  var initialVerticalOffsetFactor = 1.5;
   // Make fewer pizzas!
+  var elem;
+  var movingPizzas = document.getElementById("movingPizzas1");
   for (var i = 0; i < cols * rows; i++) {
-    var elem = document.createElement('img');
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
-    elem.basicLeft = (i % cols) * s;
-    elem.basicY = (Math.floor(i / cols) * s) - (s / initialVerticalOffsetFactor);
-    // Again, use transform instead of 'top' to position the pizzas to
-    // save recalculating styles
-    var val = 'translateY(' + elem.basicY + 'px)' ;
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    // Restore default values
+    elem.style.height = "100px";
+    elem.style.width = "73.333px";
+    elem.style.left = (i % cols) * s + 'px';
+    elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    movingPizzas.appendChild(elem);
     backgroundPizzas.push(elem);
   }
   updatePositions();

@@ -21,7 +21,7 @@ on the pizza.html page, but it did seem to work properly. Since the project
 callded for page speed testing only on index.html, I left the styles linked as
 in the default file.
 
-# Pizza Optimization Overview
+## Pizza Optimization Overview
 
 First, I reduced the amount of background pizzas that were being generated. Looking
 at the sample timeline provided, I made 15 pizzas. I then used the Chrome
@@ -43,3 +43,24 @@ instead of once per pizza.
 
 These optimizations seem to make the animation render smoothly, but it still
 appears that my fps is not quite hitting 60.
+
+## Notes on Resubmission
+
+* In the `resizePizzas` function, `querySelectorAll()` calls were replaced by
+`getElementById()`
+
+* My first version used `querySelectorAll()` to construct a list of all the pizza
+images. `getElementsByClassName()` is now used instead to boost performance.
+
+* Changes to `updatePositions`:
+  * Move the phase calculation outside of the loop. Now, an array of five phase
+  values is calculated before entering the loop. Within the loop, a simpler counter
+  keeps track of which of the values to reference.
+  * Store the length of the array in variable `itemsLength` to improve for-loop
+  performance
+  * Remove `translateY` and `scale` from the transform list
+
+* `DOMContentLoaded` callback
+  * Restore default vertical position and size styles
+  * Declare the `elem` variable outside the loop
+  * Add 'px' to the left position style to preserve position in `translateX` calculation

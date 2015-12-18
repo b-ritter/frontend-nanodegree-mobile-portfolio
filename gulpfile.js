@@ -42,6 +42,13 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('css/'));
 });
 
+gulp.task('prefix-styles', function() {
+    gulp.src('*/css/**/*.css', {base: ''})
+				.pipe(autoprefixer())
+        .pipe(gulp.dest(''));
+});
+
+
 gulp.task('concat-js', function(){
   return gulp.src(app_js)
     .pipe(concat('*.js'))
@@ -55,7 +62,7 @@ gulp.task('watch', function(){
 });
 
 gulp.task('min', function(){
-	return gulp.src('*/js/**/*.js', {base: ''})
+	return gulp.src(['*/js/**/*.js','!*/js/**/*min.js'], {base: ''})
 		.pipe(uglify())
 		.pipe(rename({suffix: '.min'}))
 		.pipe(gulp.dest(''));
